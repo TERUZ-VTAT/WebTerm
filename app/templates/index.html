@@ -1,0 +1,7 @@
+{% extends "sys/base.html" %}
+
+{% block welcome_message %}{{ welcome_message }}{% if welcome_message != "" %}<br>{% endif %}{% endblock %}
+
+{% block appname %}{% if appname != "" %}{{ appname }}{% else %}WebTerm{% endif %}{% endblock %}
+
+{% block title %}{{ title }}{% if title != "" %} - {% endif %}{% endblock %}
