@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}{% block appname %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/sys/base.css') }}">
+    {% block link %}{% endblock %}
+</head>
+
+<body id="body">
+    <div id="logs">{% block welcome_message %}{% endblock %}</div>
+
+    <div id="b-main">
+        <span id="inputdialog">WebTerm></span>
+        <div class="b-maindiv" id="b-maindiv">
+            <input id="b-input" contenteditable="true"></input>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <script>
+        var id = null;
+        const socket = io();
+        document.getElementById('b-input').focus();
+
+        function createInput(msg) {
+            document.getElementById('b-input').className = "";
+            document.getElementById('b-main').className = "";
+            document.getElementById('b-input').focus();
+            document.getElementById('inputdialog').innerText = msg;
+        }
+
+        function createNewLog(val, color, tag = "span") {
+            log_spantag = document.createElement(tag);
+            log_spantag.innerText = val.replace("<br>", "\n");
+            log_spantag.style = `color: ${color};`
+            console.log(val);
+            document.getElementById('logs').appendChild(log_spantag);
+        };
+
+        document.getElementById('body').addEventListener("click", function (e) {
+            document.getElementById('b-input').focus();
+        });
+
+        document.getElementById('b-input').addEventListener("keydown", function (e) {
+            const pressedKey = e.keyCode;
+            if (pressedKey == 13) {
+                const inputValue = document.getElementById('b-input').value;
+                const log = document.getElementById('inputdialog').innerText + inputValue + "<br>";
+                createNewLog(log);
+                document.getElementById('inputdialog').innerText = "";
+                document.getElementById('b-input').value = "";
+                document.getElementById('b-input').className = "no-display";
+                document.getElementById('b-main').className = "no-display";
+
+                socket.emit('client_data', inputValue);
+            }
+        });
+
+        socket.on('set_id', function (_id) {
+            id = _id;
+            console.log(id);
+        });
+
+        socket.on('server_data', function (data) {
+            console.log(data);
+            if (data["input_mode"]) {
+                createInput(data["msg"])
+            } else {
+                createNewLog(data["msg"], data["color"], data["tag"]);
+            }
+        });
+
+        socket.on('clear_logs', function () {
+            document.getElementById('logs').innerText = "";
+        });
+    </script>
+</body>
+
+</html>

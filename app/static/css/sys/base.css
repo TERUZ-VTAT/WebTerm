@@ -1,0 +1,54 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+body {
+    background-color: #1E1E1E;
+    color: white;
+    overflow-x: hidden;
+}
+
+#b-main {
+    width: 100%;
+    display: flex;
+    margin-left: .2%;
+}
+
+#inputdialog {
+    float: left;
+}
+
+.b-maindiv {
+    width: auto;
+    position: relative;
+    flex: 1 1 auto;
+}
+
+#b-input {
+    width: 100%;
+    background-color: #1E1E1E;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    padding: 0;
+}
+
+#b-input:focus, #logs:focus {
+    outline: none;
+}
+
+#logs {
+    height: min-content;
+    font-size: 1rem;
+    margin: .2%;
+    background-color: #1E1E1E;
+    border: none;
+    color: white;
+    margin-bottom: 0;
+}
+
+.no-display {
+    display: none;
+}
