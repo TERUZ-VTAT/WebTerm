@@ -36,7 +36,6 @@
             log_spantag = document.createElement(tag);
             log_spantag.innerText = val.replace("<br>", "\n");
             log_spantag.style = `color: ${color};`
-            console.log(val);
             document.getElementById('logs').appendChild(log_spantag);
         };
 
@@ -55,17 +54,15 @@
                 document.getElementById('b-input').className = "no-display";
                 document.getElementById('b-main').className = "no-display";
 
-                socket.emit('client_data', inputValue);
+                socket.emit('client_data', {'msg': inputValue, 'id': id});
             }
         });
 
         socket.on('set_id', function (_id) {
             id = _id;
-            console.log(id);
         });
 
         socket.on('server_data', function (data) {
-            console.log(data);
             if (data["input_mode"]) {
                 createInput(data["msg"])
             } else {
