@@ -17,17 +17,23 @@ chars = string.ascii_letters + string.punctuation
 recv = False
 recv_data = ""
 
+opened = None
+
 _appname = ""
 _welcome_message = ""
 _title = ""
+
 
 @app.route('/')
 def main():
     return render_template("index.html", welcome_message=_welcome_message, appname=_appname, title=_title)
 
+
 @socketio.on('connect')
 def connect():
+    opened[0] = True
     pass
+
 
 @socketio.on('client_data')
 def server_recv(msg):
@@ -36,7 +42,8 @@ def server_recv(msg):
     global recv
     recv = True
 
-def send(msg:str="", end:str="\n", color:tuple|str=None, tag:str="span"):
+
+def send(msg: str = "", end: str = "\n", color: tuple | str = None, tag: str = "span"):
     """
     クライアントにメッセージを送信します。
     Pythonのprint関数に相当します。
@@ -45,7 +52,9 @@ def send(msg:str="", end:str="\n", color:tuple|str=None, tag:str="span"):
     if color != None:
         color = get_color(color)
     msg += end
-    socketio.emit('server_data', {'msg': msg, 'input_mode': False, 'color': color, 'tag': tag})
+    socketio.emit('server_data', {
+                  'msg': msg, 'input_mode': False, 'color': color, 'tag': tag})
+
 
 def get_color(val):
     if type(val) == tuple:
@@ -56,7 +65,12 @@ def get_color(val):
         return val
 
 
-def get(msg:str=""):
+def set_opened(data):
+    global opened
+    opened = data
+
+
+def get(msg: str = ""):
     """
     クライアントにメッセージを要求します。
     Pythonのinput関数に相当します。
@@ -69,11 +83,13 @@ def get(msg:str=""):
     global recv_data
     return recv_data
 
+
 def clear():
     """
     ターミナルのログを全て削除します。
     """
     socketio.emit('clear_logs')
+
 
 def set_welcome_message(msg):
     """
@@ -81,6 +97,7 @@ def set_welcome_message(msg):
     """
     global _welcome_message
     _welcome_message = msg
+
 
 def set_appname(name):
     """
@@ -90,6 +107,7 @@ def set_appname(name):
     global _appname
     _appname = name
 
+
 def set_title(title):
     """
     タブに表示されるタイトルを設定します。
@@ -97,8 +115,11 @@ def set_title(title):
     global _title
     _title = title
 
+
 def start_server():
-    socketio.run(app, host='0.0.0.0', port=5002, debug=True, use_reloader=False)
+    socketio.run(app, host='0.0.0.0', port=5002,
+                 debug=True, use_reloader=False)
+
 
 if __name__ == '__main__':
     start_server()
