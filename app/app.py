@@ -1,8 +1,8 @@
-from sysfiles.WebTerm import set_appname, set_title, start_server, set_opened, set_queue, set_welcome_message
+from sysfiles.WebTerm import set_appname, set_title, start_server, set_queue, set_welcome_message
 from sysfiles.socsys import socsys
 import threading
 
-run = [False]
+
 queue = []
 
 
@@ -22,12 +22,11 @@ class main(socsys):
 
 
 if __name__ == '__main__':
-    set_opened(run)
     set_queue(queue)
     set_appname(app_name)
     set_title(title)
     set_welcome_message(welcome_message)
-    
+
     server_thread = threading.Thread(target=start_server)
     server_thread.start()
     while True:

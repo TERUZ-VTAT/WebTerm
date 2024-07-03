@@ -32,7 +32,8 @@ def main():
 def connect():
     new_id = ""
     while True:
-        new_id = ''.join(random.choice(string.ascii_letters) for _ in range(7)) + "=" + ''.join(random.choice(string.ascii_letters) for _ in range(3))
+        new_id = ''.join(random.choice(string.ascii_letters) for _ in range(
+            7)) + "=" + ''.join(random.choice(string.ascii_letters) for _ in range(3))
         global ids
         if not new_id in ids:
             ids.append(new_id)
@@ -42,15 +43,9 @@ def connect():
     queue.append(new_id)
 
 
-def set_opened(data):
-    global opened
-    opened = data
-
-
 def set_queue(data):
     global queue
     queue = data
-
 
 
 @socketio.on('client_data')
@@ -90,7 +85,6 @@ def get(id, msg: str = ""):
 
 def clear(id):
     socketio.emit('clear_logs', to=id)
-
 
 
 def set_welcome_message(msg):
