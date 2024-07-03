@@ -20,6 +20,7 @@ class main(socsys):
         # メインプログラムをここに記載
         pass
 
+
 if __name__ == '__main__':
     set_opened(run)
     set_queue(queue)

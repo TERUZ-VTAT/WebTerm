@@ -18,8 +18,6 @@ queue = []
 recv = False
 recv_data = {}
 
-opened = None
-
 _appname = ""
 _welcome_message = ""
 _title = ""
@@ -52,6 +50,7 @@ def set_opened(data):
 def set_queue(data):
     global queue
     queue = data
+
 
 
 @socketio.on('client_data')
@@ -91,6 +90,7 @@ def get(id, msg: str = ""):
 
 def clear(id):
     socketio.emit('clear_logs', to=id)
+
 
 
 def set_welcome_message(msg):
